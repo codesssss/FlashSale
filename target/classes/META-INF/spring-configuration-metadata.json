@@ -1,0 +1,47 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis",
+      "type": "com.sxh.flashsale.redis.RedisConfig"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.host",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.pool-max-idle",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.pool-max-total",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.pool-max-wait",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.sxh.flashsale.redis.RedisConfig",
+      "name": "redis.timeout",
+      "type": "java.lang.Integer"
+    }
+  ]
+}
