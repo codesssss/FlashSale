@@ -6,11 +6,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.redis.AccessKey;
 import com.sxh.flashsale.result.CodeMsg;
 import com.sxh.flashsale.result.Result;
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import com.sxh.flashsale.redis.RedisService;
 public class AccessInterceptor  extends HandlerInterceptorAdapter{
 	
 	@Autowired
-    MiaoshaUserService userService;
+	FlashSaleUserService userService;
 	
 	@Autowired
 	RedisService redisService;
@@ -33,7 +33,7 @@ public class AccessInterceptor  extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		if(handler instanceof HandlerMethod) {
-			MiaoshaUser user = getUser(request, response);
+			FlashSaleUser user = getUser(request, response);
 			UserContext.setUser(user);
 			HandlerMethod hm = (HandlerMethod)handler;
 			AccessLimit accessLimit = hm.getMethodAnnotation(AccessLimit.class);
@@ -76,9 +76,9 @@ public class AccessInterceptor  extends HandlerInterceptorAdapter{
 		out.close();
 	}
 
-	private MiaoshaUser getUser(HttpServletRequest request, HttpServletResponse response) {
-		String paramToken = request.getParameter(MiaoshaUserService.COOKI_NAME_TOKEN);
-		String cookieToken = getCookieValue(request, MiaoshaUserService.COOKI_NAME_TOKEN);
+	private FlashSaleUser getUser(HttpServletRequest request, HttpServletResponse response) {
+		String paramToken = request.getParameter(FlashSaleUserService.COOKI_NAME_TOKEN);
+		String cookieToken = getCookieValue(request, FlashSaleUserService.COOKI_NAME_TOKEN);
 		if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
 			return null;
 		}

@@ -2,7 +2,7 @@ package com.sxh.flashsale.domain;
 
 import java.util.Date;
 
-public class MiaoshaGoods {
+public class FlashSaleGoods {
 	private Long id;
 	private Long goodsId;
 	private Integer stockCount;

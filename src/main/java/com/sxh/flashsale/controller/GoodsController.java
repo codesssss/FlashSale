@@ -5,12 +5,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.redis.GoodsKey;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.result.Result;
 import com.sxh.flashsale.service.GoodsService;
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import com.sxh.flashsale.vo.GoodsDetailVo;
 import com.sxh.flashsale.vo.GoodsVo;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 public class GoodsController {
 
 	@Autowired
-    MiaoshaUserService userService;
+	FlashSaleUserService userService;
 	
 	@Autowired
     RedisService redisService;
@@ -50,7 +50,7 @@ public class GoodsController {
 	 * */
     @RequestMapping(value="/to_list", produces="text/html")
     @ResponseBody
-    public String list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user) {
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model, FlashSaleUser user) {
     	model.addAttribute("user", user);
     	//取缓存
 //    	String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
@@ -72,8 +72,8 @@ public class GoodsController {
     
     @RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")
     @ResponseBody
-    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
-    		@PathVariable("goodsId")long goodsId) {
+    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model, FlashSaleUser user,
+						  @PathVariable("goodsId")long goodsId) {
     	model.addAttribute("user", user);
     	
     	//取缓存
@@ -116,7 +116,7 @@ public class GoodsController {
     
     @RequestMapping(value="/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user,
+    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, FlashSaleUser user,
                                         @PathVariable("goodsId")long goodsId) {
     	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
     	long startAt = goods.getStartDate().getTime();

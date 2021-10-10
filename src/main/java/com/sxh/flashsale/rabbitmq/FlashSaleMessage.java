@@ -1,14 +1,14 @@
 package com.sxh.flashsale.rabbitmq;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 
-public class MiaoshaMessage {
-	private MiaoshaUser user;
+public class FlashSaleMessage {
+	private FlashSaleUser user;
 	private long goodsId;
-	public MiaoshaUser getUser() {
+	public FlashSaleUser getUser() {
 		return user;
 	}
-	public void setUser(MiaoshaUser user) {
+	public void setUser(FlashSaleUser user) {
 		this.user = user;
 	}
 	public long getGoodsId() {

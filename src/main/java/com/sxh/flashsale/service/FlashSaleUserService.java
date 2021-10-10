@@ -8,65 +8,65 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sxh.flashsale.dao.MiaoshaUserDao;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.dao.FlashSaleUserDao;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.exception.GlobalException;
-import com.sxh.flashsale.redis.MiaoshaUserKey;
+import com.sxh.flashsale.redis.FlashSaleUserKey;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.util.MD5Util;
 import com.sxh.flashsale.util.UUIDUtil;
 import com.sxh.flashsale.vo.LoginVo;
 
 @Service
-public class MiaoshaUserService {
+public class FlashSaleUserService {
 	
 	
 	public static final String COOKI_NAME_TOKEN = "token";
 	
 	@Autowired
-	MiaoshaUserDao miaoshaUserDao;
+    FlashSaleUserDao flashSaleUserDao;
 	
 	@Autowired
 	RedisService redisService;
 	
-	public MiaoshaUser getById(long id) {
+	public FlashSaleUser getById(long id) {
 		//取缓存
-		MiaoshaUser user = redisService.get(MiaoshaUserKey.getById, ""+id, MiaoshaUser.class);
+		FlashSaleUser user = redisService.get(FlashSaleUserKey.getById, ""+id, FlashSaleUser.class);
 		if(user != null) {
 			return user;
 		}
 		//取数据库
-		user = miaoshaUserDao.getById(id);
+		user = flashSaleUserDao.getById(id);
 		if(user != null) {
-			redisService.set(MiaoshaUserKey.getById, ""+id, user);
+			redisService.set(FlashSaleUserKey.getById, ""+id, user);
 		}
 		return user;
 	}
 	// http://blog.csdn.net/tTU1EvLDeLFq5btqiK/article/details/78693323
 	public boolean updatePassword(String token, long id, String formPass) {
 		//取user
-		MiaoshaUser user = getById(id);
+		FlashSaleUser user = getById(id);
 		if(user == null) {
 			throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
 		}
 		//更新数据库
-		MiaoshaUser toBeUpdate = new MiaoshaUser();
+		FlashSaleUser toBeUpdate = new FlashSaleUser();
 		toBeUpdate.setId(id);
 		toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
-		miaoshaUserDao.update(toBeUpdate);
+		flashSaleUserDao.update(toBeUpdate);
 		//处理缓存
-		redisService.delete(MiaoshaUserKey.getById, ""+id);
+		redisService.delete(FlashSaleUserKey.getById, ""+id);
 		user.setPassword(toBeUpdate.getPassword());
-		redisService.set(MiaoshaUserKey.token, token, user);
+		redisService.set(FlashSaleUserKey.token, token, user);
 		return true;
 	}
 
 
-	public MiaoshaUser getByToken(HttpServletResponse response, String token) {
+	public FlashSaleUser getByToken(HttpServletResponse response, String token) {
 		if(StringUtils.isEmpty(token)) {
 			return null;
 		}
-		MiaoshaUser user = redisService.get(MiaoshaUserKey.token, token, MiaoshaUser.class);
+		FlashSaleUser user = redisService.get(FlashSaleUserKey.token, token, FlashSaleUser.class);
 		//延长有效期
 		if(user != null) {
 			addCookie(response, token, user);
@@ -82,7 +82,7 @@ public class MiaoshaUserService {
 		String mobile = loginVo.getMobile();
 		String formPass = loginVo.getPassword();
 		//判断手机号是否存在
-		MiaoshaUser user = getById(Long.parseLong(mobile));
+		FlashSaleUser user = getById(Long.parseLong(mobile));
 		if(user == null) {
 			throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
 		}
@@ -99,10 +99,10 @@ public class MiaoshaUserService {
 		return token;
 	}
 	
-	private void addCookie(HttpServletResponse response, String token, MiaoshaUser user) {
-		redisService.set(MiaoshaUserKey.token, token, user);
+	private void addCookie(HttpServletResponse response, String token, FlashSaleUser user) {
+		redisService.set(FlashSaleUserKey.token, token, user);
 		Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
-		cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
+		cookie.setMaxAge(FlashSaleUserKey.token.expireSeconds());
 		cookie.setPath("/");
 		response.addCookie(cookie);
 	}

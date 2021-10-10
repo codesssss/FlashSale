@@ -1,12 +1,12 @@
 package com.sxh.flashsale.vo;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 
 public class GoodsDetailVo {
 	private int miaoshaStatus = 0;
 	private int remainSeconds = 0;
 	private GoodsVo goods ;
-	private MiaoshaUser user;
+	private FlashSaleUser user;
 	public int getMiaoshaStatus() {
 		return miaoshaStatus;
 	}
@@ -25,10 +25,10 @@ public class GoodsDetailVo {
 	public void setGoods(GoodsVo goods) {
 		this.goods = goods;
 	}
-	public MiaoshaUser getUser() {
+	public FlashSaleUser getUser() {
 		return user;
 	}
-	public void setUser(MiaoshaUser user) {
+	public void setUser(FlashSaleUser user) {
 		this.user = user;
 	}
 }

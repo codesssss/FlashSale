@@ -1,16 +1,16 @@
 package com.sxh.flashsale.access;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 
 public class UserContext {
 	
-	private static ThreadLocal<MiaoshaUser> userHolder = new ThreadLocal<MiaoshaUser>();
+	private static ThreadLocal<FlashSaleUser> userHolder = new ThreadLocal<FlashSaleUser>();
 	
-	public static void setUser(MiaoshaUser user) {
+	public static void setUser(FlashSaleUser user) {
 		userHolder.set(user);
 	}
 	
-	public static MiaoshaUser getUser() {
+	public static FlashSaleUser getUser() {
 		return userHolder.get();
 	}
 

@@ -1,12 +1,12 @@
 package com.sxh.flashsale.controller;
 
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.domain.OrderInfo;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.result.CodeMsg;
 import com.sxh.flashsale.result.Result;
 import com.sxh.flashsale.service.GoodsService;
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import com.sxh.flashsale.service.OrderService;
 import com.sxh.flashsale.vo.GoodsVo;
 import com.sxh.flashsale.vo.OrderDetailVo;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderController {
 
 	@Autowired
-    MiaoshaUserService userService;
+	FlashSaleUserService userService;
 	
 	@Autowired
     RedisService redisService;
@@ -35,7 +35,7 @@ public class OrderController {
 	
     @RequestMapping("/detail")
     @ResponseBody
-    public Result<OrderDetailVo> info(Model model, MiaoshaUser user,
+    public Result<OrderDetailVo> info(Model model, FlashSaleUser user,
                                       @RequestParam("orderId") long orderId) {
     	if(user == null) {
     		return Result.error(CodeMsg.SESSION_ERROR);

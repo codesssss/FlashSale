@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sxh.flashsale.domain.MiaoshaOrder;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleOrder;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.domain.OrderInfo;
-import com.sxh.flashsale.redis.MiaoshaKey;
+import com.sxh.flashsale.redis.FlashSaleKey;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.util.MD5Util;
 import com.sxh.flashsale.util.UUIDUtil;
@@ -25,7 +25,7 @@ import com.sxh.flashsale.vo.GoodsVo;
 
 @SuppressWarnings("restriction")
 @Service
-public class MiaoshaService {
+public class FlashSaleService {
 	
 	@Autowired
 	GoodsService goodsService;
@@ -37,7 +37,7 @@ public class MiaoshaService {
 	RedisService redisService;
 
 	@Transactional
-	public OrderInfo miaosha(MiaoshaUser user, GoodsVo goods) {
+	public OrderInfo miaosha(FlashSaleUser user, GoodsVo goods) {
 		//减库存 下订单 写入秒杀订单
 		boolean success = goodsService.reduceStock(goods);
 		if(success) {
@@ -50,7 +50,7 @@ public class MiaoshaService {
 	}
 
 	public long getMiaoshaResult(Long userId, long goodsId) {
-		MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+		FlashSaleOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
 		if(order != null) {//秒杀成功
 			return order.getOrderId();
 		}else {
@@ -64,11 +64,11 @@ public class MiaoshaService {
 	}
 
 	private void setGoodsOver(Long goodsId) {
-		redisService.set(MiaoshaKey.isGoodsOver, ""+goodsId, true);
+		redisService.set(FlashSaleKey.isGoodsOver, ""+goodsId, true);
 	}
 	
 	private boolean getGoodsOver(long goodsId) {
-		return redisService.exists(MiaoshaKey.isGoodsOver, ""+goodsId);
+		return redisService.exists(FlashSaleKey.isGoodsOver, ""+goodsId);
 	}
 	
 	public void reset(List<GoodsVo> goodsList) {
@@ -76,24 +76,24 @@ public class MiaoshaService {
 		orderService.deleteOrders();
 	}
 
-	public boolean checkPath(MiaoshaUser user, long goodsId, String path) {
+	public boolean checkPath(FlashSaleUser user, long goodsId, String path) {
 		if(user == null || path == null) {
 			return false;
 		}
-		String pathOld = redisService.get(MiaoshaKey.getMiaoshaPath, ""+user.getId() + "_"+ goodsId, String.class);
+		String pathOld = redisService.get(FlashSaleKey.getMiaoshaPath, ""+user.getId() + "_"+ goodsId, String.class);
 		return path.equals(pathOld);
 	}
 
-	public String createMiaoshaPath(MiaoshaUser user, long goodsId) {
+	public String createMiaoshaPath(FlashSaleUser user, long goodsId) {
 		if(user == null || goodsId <=0) {
 			return null;
 		}
 		String str = MD5Util.md5(UUIDUtil.uuid()+"123456");
-    	redisService.set(MiaoshaKey.getMiaoshaPath, ""+user.getId() + "_"+ goodsId, str);
+    	redisService.set(FlashSaleKey.getMiaoshaPath, ""+user.getId() + "_"+ goodsId, str);
 		return str;
 	}
 
-	public BufferedImage createVerifyCode(MiaoshaUser user, long goodsId) {
+	public BufferedImage createVerifyCode(FlashSaleUser user, long goodsId) {
 		if(user == null || goodsId <=0) {
 			return null;
 		}
@@ -124,20 +124,20 @@ public class MiaoshaService {
 		g.dispose();
 		//把验证码存到redis中
 		int rnd = calc(verifyCode);
-		redisService.set(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, rnd);
+		redisService.set(FlashSaleKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, rnd);
 		//输出图片	
 		return image;
 	}
 
-	public boolean checkVerifyCode(MiaoshaUser user, long goodsId, int verifyCode) {
+	public boolean checkVerifyCode(FlashSaleUser user, long goodsId, int verifyCode) {
 		if(user == null || goodsId <=0) {
 			return false;
 		}
-		Integer codeOld = redisService.get(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, Integer.class);
+		Integer codeOld = redisService.get(FlashSaleKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, Integer.class);
 		if(codeOld == null || codeOld - verifyCode != 0 ) {
 			return false;
 		}
-		redisService.delete(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId);
+		redisService.delete(FlashSaleKey.getMiaoshaVerifyCode, user.getId()+","+goodsId);
 		return true;
 	}
 	

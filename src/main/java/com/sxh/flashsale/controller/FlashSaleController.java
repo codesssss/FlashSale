@@ -10,17 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sxh.flashsale.access.AccessLimit;
-import com.sxh.flashsale.domain.MiaoshaOrder;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleOrder;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.redis.GoodsKey;
-import com.sxh.flashsale.redis.MiaoshaKey;
+import com.sxh.flashsale.redis.FlashSaleKey;
 import com.sxh.flashsale.redis.OrderKey;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.result.CodeMsg;
 import com.sxh.flashsale.result.Result;
 import com.sxh.flashsale.service.GoodsService;
-import com.sxh.flashsale.service.MiaoshaService;
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import com.sxh.flashsale.service.OrderService;
 import com.sxh.flashsale.vo.GoodsVo;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,14 +34,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sxh.flashsale.rabbitmq.MQSender;
-import com.sxh.flashsale.rabbitmq.MiaoshaMessage;
+import com.sxh.flashsale.rabbitmq.FlashSaleMessage;
 
 @Controller
 @RequestMapping("/miaosha")
-public class MiaoshaController implements InitializingBean {
+public class FlashSaleController implements InitializingBean {
 
 	@Autowired
-    MiaoshaUserService userService;
+	FlashSaleUserService userService;
 	
 	@Autowired
     RedisService redisService;
@@ -53,7 +53,7 @@ public class MiaoshaController implements InitializingBean {
     OrderService orderService;
 	
 	@Autowired
-    MiaoshaService miaoshaService;
+	FlashSaleService flashSaleService;
 	
 	@Autowired
 	MQSender sender;
@@ -85,8 +85,8 @@ public class MiaoshaController implements InitializingBean {
 			localOverMap.put(goods.getId(), false);
 		}
 		redisService.delete(OrderKey.getMiaoshaOrderByUidGid);
-		redisService.delete(MiaoshaKey.isGoodsOver);
-		miaoshaService.reset(goodsList);
+		redisService.delete(FlashSaleKey.isGoodsOver);
+		flashSaleService.reset(goodsList);
 		return Result.success(true);
 	}
 	
@@ -97,7 +97,7 @@ public class MiaoshaController implements InitializingBean {
 	 * */
     @RequestMapping(value="/{path}/do_miaosha", method=RequestMethod.POST)
     @ResponseBody
-    public Result<Integer> miaosha(Model model, MiaoshaUser user,
+    public Result<Integer> miaosha(Model model, FlashSaleUser user,
                                    @RequestParam("goodsId")long goodsId,
                                    @PathVariable("path") String path) {
     	model.addAttribute("user", user);
@@ -105,7 +105,7 @@ public class MiaoshaController implements InitializingBean {
     		return Result.error(CodeMsg.SESSION_ERROR);
     	}
     	//验证path
-    	boolean check = miaoshaService.checkPath(user, goodsId, path);
+    	boolean check = flashSaleService.checkPath(user, goodsId, path);
     	if(!check){
     		return Result.error(CodeMsg.REQUEST_ILLEGAL);
     	}
@@ -121,12 +121,12 @@ public class MiaoshaController implements InitializingBean {
     		return Result.error(CodeMsg.MIAO_SHA_OVER);
     	}
     	//判断是否已经秒杀到了
-    	MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+    	FlashSaleOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
     	if(order != null) {
     		return Result.error(CodeMsg.REPEATE_MIAOSHA);
     	}
     	//入队
-    	MiaoshaMessage mm = new MiaoshaMessage();
+    	FlashSaleMessage mm = new FlashSaleMessage();
     	mm.setUser(user);
     	mm.setGoodsId(goodsId);
     	sender.sendMiaoshaMessage(mm);
@@ -156,44 +156,44 @@ public class MiaoshaController implements InitializingBean {
      * */
     @RequestMapping(value="/result", method=RequestMethod.GET)
     @ResponseBody
-    public Result<Long> miaoshaResult(Model model,MiaoshaUser user,
-    		@RequestParam("goodsId")long goodsId) {
+    public Result<Long> miaoshaResult(Model model, FlashSaleUser user,
+                                      @RequestParam("goodsId")long goodsId) {
     	model.addAttribute("user", user);
     	if(user == null) {
     		return Result.error(CodeMsg.SESSION_ERROR);
     	}
-    	long result  =miaoshaService.getMiaoshaResult(user.getId(), goodsId);
+    	long result  = flashSaleService.getMiaoshaResult(user.getId(), goodsId);
     	return Result.success(result);
     }
     
     @AccessLimit(seconds=5, maxCount=5, needLogin=true)
     @RequestMapping(value="/path", method=RequestMethod.GET)
     @ResponseBody
-    public Result<String> getMiaoshaPath(HttpServletRequest request, MiaoshaUser user,
+    public Result<String> getMiaoshaPath(HttpServletRequest request, FlashSaleUser user,
     		@RequestParam("goodsId")long goodsId,
     		@RequestParam(value="verifyCode", defaultValue="0")int verifyCode
     		) {
     	if(user == null) {
     		return Result.error(CodeMsg.SESSION_ERROR);
     	}
-    	boolean check = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
+    	boolean check = flashSaleService.checkVerifyCode(user, goodsId, verifyCode);
     	if(!check) {
     		return Result.error(CodeMsg.REQUEST_ILLEGAL);
     	}
-    	String path  =miaoshaService.createMiaoshaPath(user, goodsId);
+    	String path  = flashSaleService.createMiaoshaPath(user, goodsId);
     	return Result.success(path);
     }
     
     
     @RequestMapping(value="/verifyCode", method=RequestMethod.GET)
     @ResponseBody
-    public Result<String> getMiaoshaVerifyCod(HttpServletResponse response,MiaoshaUser user,
-    		@RequestParam("goodsId")long goodsId) {
+    public Result<String> getMiaoshaVerifyCod(HttpServletResponse response, FlashSaleUser user,
+                                              @RequestParam("goodsId")long goodsId) {
     	if(user == null) {
     		return Result.error(CodeMsg.SESSION_ERROR);
     	}
     	try {
-    		BufferedImage image  = miaoshaService.createVerifyCode(user, goodsId);
+    		BufferedImage image  = flashSaleService.createVerifyCode(user, goodsId);
     		OutputStream out = response.getOutputStream();
     		ImageIO.write(image, "JPEG", out);
     		out.flush();

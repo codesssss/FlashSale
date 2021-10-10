@@ -1,6 +1,6 @@
 package com.sxh.flashsale.config;
 
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -10,17 +10,17 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.sxh.flashsale.access.UserContext;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Autowired
-    MiaoshaUserService userService;
+	FlashSaleUserService userService;
 	
 	public boolean supportsParameter(MethodParameter parameter) {
 		Class<?> clazz = parameter.getParameterType();
-		return clazz==MiaoshaUser.class;
+		return clazz== FlashSaleUser.class;
 	}
 
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,

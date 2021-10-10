@@ -13,15 +13,15 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleUser;
 
 public class UserUtil {
 	
 	private static void createUser(int count) throws Exception{
-		List<MiaoshaUser> users = new ArrayList<MiaoshaUser>(count);
+		List<FlashSaleUser> users = new ArrayList<FlashSaleUser>(count);
 		//生成用户
 		for(int i=0;i<count;i++) {
-			MiaoshaUser user = new MiaoshaUser();
+			FlashSaleUser user = new FlashSaleUser();
 			user.setId(13000000000L+i);
 			user.setLoginCount(1);
 			user.setNickname("user"+i);
@@ -59,7 +59,7 @@ public class UserUtil {
 		file.createNewFile();
 		raf.seek(0);
 		for(int i=0;i<users.size();i++) {
-			MiaoshaUser user = users.get(i);
+			FlashSaleUser user = users.get(i);
 			URL url = new URL(urlString);
 			HttpURLConnection co = (HttpURLConnection)url.openConnection();
 			co.setRequestMethod("POST");

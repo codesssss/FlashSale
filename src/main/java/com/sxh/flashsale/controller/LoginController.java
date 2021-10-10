@@ -5,7 +5,7 @@ import javax.validation.Valid;
 
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.result.Result;
-import com.sxh.flashsale.service.MiaoshaUserService;
+import com.sxh.flashsale.service.FlashSaleUserService;
 import com.sxh.flashsale.vo.LoginVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class LoginController {
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
-    MiaoshaUserService userService;
+    FlashSaleUserService userService;
 	
 	@Autowired
     RedisService redisService;

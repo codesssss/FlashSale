@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxh.flashsale.dao.OrderDao;
-import com.sxh.flashsale.domain.MiaoshaOrder;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleOrder;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.domain.OrderInfo;
 import com.sxh.flashsale.redis.OrderKey;
 import com.sxh.flashsale.redis.RedisService;
@@ -23,9 +23,9 @@ public class OrderService {
 	@Autowired
 	RedisService redisService;
 	
-	public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
+	public FlashSaleOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
 		//return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
-		return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, MiaoshaOrder.class);
+		return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, FlashSaleOrder.class);
 	}
 	
 	public OrderInfo getOrderById(long orderId) {
@@ -34,7 +34,7 @@ public class OrderService {
 	
 
 	@Transactional
-	public OrderInfo createOrder(MiaoshaUser user, GoodsVo goods) {
+	public OrderInfo createOrder(FlashSaleUser user, GoodsVo goods) {
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setCreateDate(new Date());
 		orderInfo.setDeliveryAddrId(0L);
@@ -46,13 +46,13 @@ public class OrderService {
 		orderInfo.setStatus(0);
 		orderInfo.setUserId(user.getId());
 		orderDao.insert(orderInfo);
-		MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
-		miaoshaOrder.setGoodsId(goods.getId());
-		miaoshaOrder.setOrderId(orderInfo.getId());
-		miaoshaOrder.setUserId(user.getId());
-		orderDao.insertMiaoshaOrder(miaoshaOrder);
+		FlashSaleOrder flashSaleOrder = new FlashSaleOrder();
+		flashSaleOrder.setGoodsId(goods.getId());
+		flashSaleOrder.setOrderId(orderInfo.getId());
+		flashSaleOrder.setUserId(user.getId());
+		orderDao.insertMiaoshaOrder(flashSaleOrder);
 		
-		redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), miaoshaOrder);
+		redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), flashSaleOrder);
 		 
 		return orderInfo;
 	}

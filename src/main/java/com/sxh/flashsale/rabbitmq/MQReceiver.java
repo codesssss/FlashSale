@@ -1,10 +1,10 @@
 package com.sxh.flashsale.rabbitmq;
 
-import com.sxh.flashsale.domain.MiaoshaOrder;
-import com.sxh.flashsale.domain.MiaoshaUser;
+import com.sxh.flashsale.domain.FlashSaleOrder;
+import com.sxh.flashsale.domain.FlashSaleUser;
 import com.sxh.flashsale.redis.RedisService;
 import com.sxh.flashsale.service.GoodsService;
-import com.sxh.flashsale.service.MiaoshaService;
+import com.sxh.flashsale.service.FlashSaleService;
 import com.sxh.flashsale.service.OrderService;
 import com.sxh.flashsale.vo.GoodsVo;
 import org.slf4j.Logger;
@@ -28,13 +28,13 @@ public class MQReceiver {
         OrderService orderService;
 		
 		@Autowired
-        MiaoshaService miaoshaService;
+		FlashSaleService flashSaleService;
 		
-		@RabbitListener(queues=MQConfig.MIAOSHA_QUEUE)
+		@RabbitListener(queues=MQConfig.FLASHSALE_QUEUE)
 		public void receive(String message) {
 			log.info("receive message:"+message);
-			MiaoshaMessage mm  = RedisService.stringToBean(message, MiaoshaMessage.class);
-			MiaoshaUser user = mm.getUser();
+			FlashSaleMessage mm  = RedisService.stringToBean(message, FlashSaleMessage.class);
+			FlashSaleUser user = mm.getUser();
 			long goodsId = mm.getGoodsId();
 			
 			GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
@@ -43,12 +43,12 @@ public class MQReceiver {
 	    		return;
 	    	}
 	    	//判断是否已经秒杀到了
-	    	MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+	    	FlashSaleOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
 	    	if(order != null) {
 	    		return;
 	    	}
 	    	//减库存 下订单 写入秒杀订单
-	    	miaoshaService.miaosha(user, goods);
+	    	flashSaleService.miaosha(user, goods);
 		}
 	
 //		@RabbitListener(queues=MQConfig.QUEUE)

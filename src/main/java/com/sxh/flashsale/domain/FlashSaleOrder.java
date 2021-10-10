@@ -1,6 +1,6 @@
 package com.sxh.flashsale.domain;
 
-public class MiaoshaOrder {
+public class FlashSaleOrder {
 	private Long id;
 	private Long userId;
 	private Long  orderId;
