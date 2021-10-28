@@ -2,8 +2,6 @@
 
 
 
-[TOC]
-
 ## Project highlights
 
 ### Distributed system scheme
@@ -34,7 +32,17 @@ The bottleneck is the database's ability to handle requests. After a large numbe
 
 ### The overall architecture
 
-![architecture](https://github.com/jinshuai86/SecKillSystem/raw/master/architecture.svg)
+![architecture](https://github.com/codesssss/FlashSale/blob/master/architecture.svg)
 
 ## The detailed guide to build such a system
 
+[Chap01 Integrate Mybatis and Redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap01.pdf)
+[Chap02 MD5 encryption and globle exception handler](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap02.pdf)
+[Chap03 Implement distributed session via redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap03.pdf)
+[Chap04 Implement the flash sale function](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap04.pdf)
+[Chap05 Using JMeter to pressure test](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap05.pdf)
+[Chap06 Page cache and object cache](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap06.pdf)
+[Chap07 Integrate rabbitMQ and optimize the interface](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap07.pdf)
+[Chap08 Optimizing the flash sale system after integrated rabbitMQ](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap08.pdf)
+[Chap09 Dynamic flash sale url, mathematical formula verification code and the interface current limiting](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap09.pdf)
+[Chap10 Conclusion the project](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap10.pdf)
