@@ -1,6 +1,15 @@
 # FlashSaleSystem
 
-
+* [FlashSaleSystem](#flashsalesystem)
+  * [Project highlights](#project-highlights)
+    * [Distributed system scheme](#distributed-system-scheme)
+    * [System optimization](#system-optimization)
+    * [In\-depth microservice skills](#in-depth-microservice-skills)
+    * [The security policy](#the-security-policy)
+  * [Server design ideas](#server-design-ideas)
+    * [The overall architecture](#the-overall-architecture)
+  * [The detailed guide to build such a system](#the-detailed-guide-to-build-such-a-system)
+  * [Mainly questions](#mainly-questions)
 
 ## Project highlights
 
@@ -36,23 +45,27 @@ The bottleneck is the database's ability to handle requests. After a large numbe
 
 ## The detailed guide to build such a system
 
-[Chap01 Integrate Mybatis and Redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap01.pdf)
+[Chap01: Integrate Mybatis and Redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap01.pdf)
 
-[Chap02 MD5 encryption and globle exception handler](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap02.pdf)
+[Chap02: MD5 encryption and globle exception handler](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap02.pdf)
 
-[Chap03 Implement distributed session via redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap03.pdf)
+[Chap03: Implement distributed session via redis](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap03.pdf)
 
-[Chap04 Implement the flash sale function](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap04.pdf)
+[Chap04: Implement the flash sale function](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap04.pdf)
 
-[Chap05 Using JMeter to pressure test](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap05.pdf)
+[Chap05: Using JMeter to pressure test](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap05.pdf)
 
-[Chap06 Page cache and object cache](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap06.pdf)
+[Chap06: Page cache and object cache](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap06.pdf)
 
-[Chap07 Integrate rabbitMQ and optimize the interface](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap07.pdf)
+[Chap07: Integrate rabbitMQ and optimize the interface](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap07.pdf)
 
-[Chap08 Optimizing the flash sale system after integrated rabbitMQ](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap08.pdf)
+[Chap08: Optimizing the flash sale system after integrated rabbitMQ](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap08.pdf)
 
-[Chap09 Dynamic flash sale url, mathematical formula verification code and the interface current limiting](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap09.pdf)
+[Chap09: Dynamic flash sale url, mathematical formula verification code and the interface current limiting](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap09.pdf)
 
-[Chap10 Conclusion the project](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap10.pdf)
+[Chap10: Conclusion the project](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap10.pdf)
+
+## Mainly questions
+
+
 
