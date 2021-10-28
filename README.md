@@ -2,6 +2,8 @@
 
 
 
+[TOC]
+
 ## Project highlights
 
 ### Distributed system scheme
@@ -16,7 +18,7 @@ Browser cache/Nginx cache/page cache/object cache/RabbitMQ queue asynchronous or
 
 SpringBoot/RabbitMQ/Redis/MySQL, based on the most popular Java microservices framework
 
-#### The security policy
+### The security policy
 
 Graphic verification code, flow limiting and brush prevention, interface address hiding, various security mechanisms to reject the robot ticket brushing
 
@@ -33,3 +35,6 @@ The bottleneck is the database's ability to handle requests. After a large numbe
 ### The overall architecture
 
 ![architecture](https://github.com/jinshuai86/SecKillSystem/raw/master/architecture.svg)
+
+## The detailed guide to build such a system
+
