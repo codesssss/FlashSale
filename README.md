@@ -65,7 +65,17 @@ The bottleneck is the database's ability to handle requests. After a large numbe
 
 [Chap10: Conclusion the project](https://github.com/codesssss/FlashSale/blob/master/guideDoc/Chap10.pdf)
 
-## Mainly questions
+## Main questions
+
+#### How to ensure thread safety and prevent oversold when inventory is deducted in Redis?
+
+Redis has a decr() method that implements decrement and atomicity
+
+#### How to limit traffic and prevent robot access?
+
+This is done by interceptor, and we have a custom annotation that will mark a method, specify the number of times it is accessed per unit of time, and if it exceeds the requirement, it will be intercepted.
+
+Interceptor is inherited HandlerInterceptorAdapter, rewriting is preHandle method, in this method, will visit frequency synchronization to Redis, there is the period of validity of the key/value pair. Finally, you need to configure the interceptor into the project, inheriting the WebMvcConfigurerAdapter and overriding the addInterceptors() method.
 
 
 
